@@ -1,0 +1,54 @@
+<job retention_tag="120days">
+  <whiteboard>rhel72+osp8+alltests</whiteboard>
+  <recipeSet priority="Normal">
+    <recipe whiteboard="" role="RECIPE_MEMBERS" ks_meta="" kernel_options="" kernel_options_post="">
+      <autopick random="false"/>
+      <watchdog panic="ignore"/>
+      <packages/>
+      <ks_appends/>
+      <repos/>
+      <distroRequires>
+        <and>
+          <distro_family value="RedHatEnterpriseLinux7" op="="/>
+          <distro_variant value="Server" op="="/>
+          <distro_name value="RHEL-7.2" op="="/>
+          <distro_arch value="x86_64" op="="/>
+        </and>
+      </distroRequires>
+      <hostRequires>
+        <and>
+          <system>
+            <memory value="12000" op="&gt;"/>
+          </system>
+          <cpu>
+            <cores value="10" op="&gt;"/>
+          </cpu>
+          <disk>
+            <size value="137438953472" op="&gt;"/>
+          </disk>
+          <arch value="x86_64" op="="/>
+          <system_type value="Machine" op="="/>
+          <key_value key="HVM" value="1" op="="/>
+        </and>
+        <system_type value="Machine"/>
+      </hostRequires>
+      <partitions>
+        <partition fs="xfs" type="part" name="/var" size="120"/>
+      </partitions>
+      <task name="/distribution/install" role="STANDALONE"/>
+      <task name="/examples/ooshift-install/Install/prepare-openstack" role="STANDALONE">
+        <params>
+          <param name="REPOSITORY" value="https://github.com/redhat-openstack/openshift-on-openstack.git"/>
+          <param name="BRANCH" value="master"/>
+        </params>
+      </task>
+      <task name="/examples/ooshift-test-stack/Install/test-stack" role="STANDALONE">
+      </task>
+      <task name="/distribution/reservesys" role="STANDALONE">
+        <params>
+          <param name="RESERVETIME" value="604800"/>
+        </params>
+      </task>
+    </recipe>
+  </recipeSet>
+</job>
